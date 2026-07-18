@@ -76,6 +76,11 @@
     stylua
     rust-analyzer
     rustfmt
+    vs-code-langservers-extracted
+    zig
+    zls
+    go
+    gopls
   ];
 
   fonts.packages = with pkgs; [
