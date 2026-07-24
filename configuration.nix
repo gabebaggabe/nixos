@@ -95,17 +95,6 @@
 
   users.users.gabe.shell = pkgs.fish;
   nixpkgs.config.allowUnfree = true;
-  hardware.graphics.enable = true;
-  hardware.nvidia.modesetting.enable = true;
-  hardware.nvidia.open = true;
-  services.xserver.videoDrivers = ["nvidia"];
-
-  environment.sessionVariables = {
-    LIBVA_DRIVER_NAME = "nvidia";
-    GBM_BACKEND = "nvidia-drm";
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    WLR_NO_HARDWARE_CURSORS = "1";
-  };
 
   programs.fish = {
     enable = true;
