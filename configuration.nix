@@ -38,7 +38,8 @@
     packages = [
     ];
   };
- programs.hyprland = {
+
+  programs.hyprland = {
     enable = true;
     xwayland.enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
@@ -107,24 +108,6 @@
       svim = "sudo HOME=$HOME nvim";
     };
   };
-
-  systemd.services.autostart = {
-    description = "run autostart.sh in mango";
-    serviceConfig.ExecStart = "/home/gabe/.config/mango/scripts/autostart.sh";
-    wantedBy = ["multi-user.target"];
-  };
-
-  security.sudo.extraRules = [
-    {
-      users = ["gabe"];
-      commands = [
-        {
-          command = "/run/current-system/sw/bin/efibootmgr";
-          options = ["NOPASSWD"];
-        }
-      ];
-    }
-  ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
