@@ -1,22 +1,16 @@
 {
-  description = "gabes flake";
+  description = "Gabes Flake";
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    mangowm = {
-      url = "github:mangowm/mango";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    hyprland.url = "github:hyprwm/Hyprland/v0.56.0";
   };
-  outputs = {
+  outputs = inputs @ {
     self,
     nixpkgs,
-    mangowm,
+    hyprland,
     ...
-  } @ inputs: {
-    packages.x86_64-linux.hello = nixpkgs.legacyPackages.x86_64-linux.hello;
-    packages.x86_64-linux.default = self.packages.x86_64-linux.hello;
-
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+  }: {
+    nixosConfiguration.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {inherit inputs;};
       modules = [
