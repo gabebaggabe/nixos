@@ -8,7 +8,6 @@
   imports = [
     ./hardware-configuration.nix
     ./modules/nvidia.nix
-    inputs.mangowm.nixosModules.mango
   ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -19,6 +18,7 @@
   networking.networkmanager.enable = true;
 
   services.displayManager.ly.enable = true;
+  services.dunst.enable = true;
 
   time.timeZone = "America/Toronto";
   i18n.defaultLocale = "en_US.UTF-8";
@@ -35,15 +35,7 @@
   users.users.gabe = {
     isNormalUser = true;
     extraGroups = ["wheel"];
-    packages = with pkgs; [
-      tree
-      git
-      foot
-      neovim
-      rofi
-      thunar
-      swaybg
-      librewolf
+    packages = [
     ];
   };
 
@@ -52,13 +44,25 @@
     xwayland.enable = true;
   };
   programs.mango.enable = true;
-
   environment.systemPackages = with pkgs; [
-    vim
+    tree
+    git
+    foot
+    efibootmgr
+    libnotify
+    neovim
+    rofi
+    thunar
+    swaybg
+    dunst
+    librewolf
     unzip
     clang
+    grim
+    slurp
     libclang
     fish
+    gh
     hyprland
     ripgrep
     spotify
@@ -76,7 +80,7 @@
     stylua
     rust-analyzer
     rustfmt
-    vs-code-langservers-extracted
+    vscode-langservers-extracted
     zig
     zls
     go
@@ -108,7 +112,30 @@
     interactiveShellInit = ''
       set fish_greeting # Disable greeting
     '';
+    shellAliases = {
+      ff = "fastfetch";
+      nrs = "sudo nixos-rebuild switch --flake /etc/nixos";
+      svim = "sudo HOME=$HOME nvim";
+    };
   };
+
+  systemd.services.autostart = {
+    description = "run autostart.sh in mango";
+    serviceConfig.ExecStart = "/home/gabe/.config/mango/scripts/autostart.sh";
+    wantedBy = ["multi-user.target"];
+  };
+
+  security.sudo.extraRules = [
+    {
+      users = ["gabe"];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/efibootmgr";
+          options = ["NOPASSWD"];
+        }
+      ];
+    }
+  ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
