@@ -67,7 +67,6 @@
     ripgrep
     spotify
     steam
-    ani-cli
     wl-clipboard
     waybar
     bibata-cursors
