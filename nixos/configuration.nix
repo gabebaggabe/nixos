@@ -1,9 +1,4 @@
-{
-  pkgs,
-  config,
-  inputs,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     ./modules/games.nix
     ./hardware-configuration.nix
@@ -15,6 +10,11 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  fileSystems."/games" = {
+    device = "/dev/disk/by-uuid/40933574-d109-4226-9d11-60d0cb71b1cd";
+    fsType = "ext4";
+  };
 
   environment.systemPackages = with pkgs; [
     qt6.qt5compat
@@ -39,8 +39,6 @@
     keepassxc
     fuse3
     prismlauncher
-    wallust
-    matugen
     libnotify
     git
     btop
@@ -67,6 +65,7 @@
   ];
 
   services.dunst.enable = true;
+  services.displayManager.ly.enable = true;
   services.printing.enable = true;
   services.libinput.enable = true;
   services.gvfs.enable = true;
